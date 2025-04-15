@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Student Management</title>
+    <style>
+        body {
+            background-color: #1a1b2f;
+            color: #f1f1f1;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #2d3142;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(18, 194, 233, 0.3);
+            width: 90%;
+            max-width: 850px;
+        }
+
+        h1, h2 {
+            color: #12c2e9;
+            text-align: center;
+        }
+
+        input, button {
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 6px;
+        }
+
+        input {
+            background-color: #1a1b2f;
+            color: #fff;
+            width: 100%;
+        }
+
+        button {
+            background-color: #3a0ca3;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #12c2e9;
+            color: #000;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #444;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3a0ca3;
+        }
+
+        td {
+            background-color: #1a1b2f;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .centered-btn {
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Student Management SOA</h1>
+    
+        <div class="section">
+            <h2>Add Student</h2>
+            <input id="studentName" placeholder="Student Name" />
+            <button onclick="addStudent()">Add</button>
+        </div>
+    
+        <div class="section">
+            <h2>Add Course</h2>
+            <input id="courseName" placeholder="Course Name" />
+            <button onclick="addCourse()">Add</button>
+        </div>
+    
+        <div class="section">
+            <h2>Enroll Student</h2>
+            <input id="studentId" placeholder="Student ID" />
+            <input id="courseId" placeholder="Course ID" />
+            <button onclick="enrollStudent()">Enroll</button>
+        </div>
+    
+        <div class="section">
+            <h2>All Students</h2>
+            <div class="centered-btn">
+                <button onclick="getStudents()">Load Students</button>
+            </div>
+            <table id="studentsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    
+        <div class="section">
+            <h2>All Enrollments</h2>
+            <div class="centered-btn">
+                <button onclick="getEnrollments()">Load Enrollments</button>
+            </div>
+            <table id="enrollmentsTable">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Course ID</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        function addStudent() {
+            fetch('http://localhost:3001/students', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: document.getElementById('studentName').value })
+            }).then(res => res.json()).then(alertMsg);
+        }
+    
+        function addCourse() {
+            fetch('http://localhost:3002/courses', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: document.getElementById('courseName').value })
+            }).then(res => res.json()).then(alertMsg);
+        }
+    
+        function enrollStudent() {
+            fetch('http://localhost:3003/enroll', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    studentId: document.getElementById('studentId').value,
+                    courseId: document.getElementById('courseId').value
+                })
+            }).then(res => res.json()).then(alertMsg);
+        }
+    
+        function getStudents() {
+            fetch('http://localhost:3001/students')
+                .then(res => res.json())
+                .then(data => {
+                    const table = document.getElementById('studentsTable').querySelector('tbody');
+                    table.innerHTML = '';
+                    data.forEach(s => {
+                        const row = `<tr><td>${s.id}</td><td>${s.name}</td></tr>`;
+                        table.innerHTML += row;
+                    });
+                });
+        }
+    
+        function getEnrollments() {
+            fetch('http://localhost:3003/enrollments')
+                .then(res => res.json())
+                .then(data => {
+                    const table = document.getElementById('enrollmentsTable').querySelector('tbody');
+                    table.innerHTML = '';
+                    data.forEach(e => {
+                        const row = `<tr><td>${e.studentId}</td><td>${e.courseId}</td></tr>`;
+                        table.innerHTML += row;
+                    });
+                });
+        }
+    
+        function alertMsg(data) {
+            alert(data.message);
+        }
+    </script>
+</body>
+
+</html>
