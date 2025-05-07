@@ -150,62 +150,81 @@
     
     <script>
         function addStudent() {
-            fetch('https://course-service-vg34.onrender.com', {
+            const name = document.getElementById('studentName').value.trim();
+            if (!name) return alert("Please enter a student name.");
+    
+            fetch("https://student-service-5rel.onrender.com", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: document.getElementById('studentName').value })
-            }).then(res => res.json()).then(alertMsg);
+                body: JSON.stringify({ name })
+            })
+            .then(res => res.json())
+            .then(alertMsg)
+            .catch(err => alert("Error adding student: " + err.message));
         }
     
         function addCourse() {
-            fetch('https://course-service-vg34.onrender.com', {
+            const name = document.getElementById('courseName').value.trim();
+            if (!name) return alert("Please enter a course name.");
+    
+            fetch("https://course-service-vg34.onrender.com", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: document.getElementById('courseName').value })
-            }).then(res => res.json()).then(alertMsg);
+                body: JSON.stringify({ name })
+            })
+            .then(res => res.json())
+            .then(alertMsg)
+            .catch(err => alert("Error adding course: " + err.message));
         }
     
         function enrollStudent() {
-            fetch('https://enrollment-service-8v56.onrender.com', {
+            const studentId = document.getElementById('studentId').value.trim();
+            const courseId = document.getElementById('courseId').value.trim();
+            if (!studentId || !courseId) return alert("Please enter both student and course IDs.");
+    
+            fetch("https://enrollment-service-8v56.onrender.com", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    studentId: document.getElementById('studentId').value,
-                    courseId: document.getElementById('courseId').value
-                })
-            }).then(res => res.json()).then(alertMsg);
+                body: JSON.stringify({ studentId, courseId })
+            })
+            .then(res => res.json())
+            .then(alertMsg)
+            .catch(err => alert("Error enrolling student: " + err.message));
         }
     
         function getStudents() {
-            fetch('https://course-service-vg34.onrender.com')
-                .then(res => res.json())
-                .then(data => {
-                    const table = document.getElementById('studentsTable').querySelector('tbody');
-                    table.innerHTML = '';
-                    data.forEach(s => {
-                        const row = `<tr><td>${s.id}</td><td>${s.name}</td></tr>`;
-                        table.innerHTML += row;
-                    });
+            fetch("https://student-service-5rel.onrender.com")
+            .then(res => res.json())
+            .then(data => {
+                const table = document.getElementById('studentsTable').querySelector('tbody');
+                table.innerHTML = '';
+                data.forEach(s => {
+                    const row = `<tr><td>${s.id}</td><td>${s.name}</td></tr>`;
+                    table.innerHTML += row;
                 });
+            })
+            .catch(err => alert("Error fetching students: " + err.message));
         }
     
         function getEnrollments() {
-            fetch('https://enrollment-service-8v56.onrender.com')
-                .then(res => res.json())
-                .then(data => {
-                    const table = document.getElementById('enrollmentsTable').querySelector('tbody');
-                    table.innerHTML = '';
-                    data.forEach(e => {
-                        const row = `<tr><td>${e.studentId}</td><td>${e.courseId}</td></tr>`;
-                        table.innerHTML += row;
-                    });
+            fetch("https://enrollment-service-8v56.onrender.com")
+            .then(res => res.json())
+            .then(data => {
+                const table = document.getElementById('enrollmentsTable').querySelector('tbody');
+                table.innerHTML = '';
+                data.forEach(e => {
+                    const row = `<tr><td>${e.studentId}</td><td>${e.courseId}</td></tr>`;
+                    table.innerHTML += row;
                 });
+            })
+            .catch(err => alert("Error fetching enrollments: " + err.message));
         }
     
         function alertMsg(data) {
-            alert(data.message);
+            alert(data.message || "Operation completed.");
         }
     </script>
+    
 </body>
 
 </html>
