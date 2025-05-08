@@ -175,7 +175,7 @@
       const name = document.getElementById('studentName').value.trim();
       if (!name) return alert("Please enter a student name.");
 
-      fetch("https://student-service-5rel.onrender.com", {
+      fetch("https://student-service-5rel.onrender.com/students", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name })
@@ -189,7 +189,7 @@
       const name = document.getElementById('courseName').value.trim();
       if (!name) return alert("Please enter a course name.");
 
-      fetch("https://course-service-vg34.onrender.com", {
+      fetch("https://course-service-vg34.onrender.com/course", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name })
@@ -204,7 +204,7 @@
       const courseId = document.getElementById('courseId').value.trim();
       if (!studentId || !courseId) return alert("Please enter both student and course IDs.");
 
-      fetch("https://enrollment-service-8v56.onrender.com", {
+      fetch("https://enrollment-service-8v56.onrender.com/enrollments", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ studentId, courseId })
@@ -215,7 +215,7 @@
     }
 
     function getStudents() {
-      fetch("https://student-service-5rel.onrender.com")
+      fetch("https://student-service-5rel.onrender.com/students")
         .then(res => res.json())
         .then(data => {
           const table = document.querySelector('#studentsTable tbody');
@@ -229,7 +229,7 @@
     }
 
     function getEnrollments() {
-      fetch("https://enrollment-service-8v56.onrender.com")
+      fetch("https://enrollment-service-8v56.onrender.com/enrollments")
         .then(res => res.json())
         .then(data => {
           const table = document.querySelector('#enrollmentsTable tbody');
