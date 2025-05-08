@@ -13,8 +13,11 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
-const port = 3001;
-app.use(cors());
+const port = process.env.PORT || 3001;
+app.use(cors({
+    origin: 'https://soafrontend-xi.vercel.app/'
+}));
+  
 app.use(bodyParser.json());
 
 const studentSchema = new mongoose.Schema({
@@ -35,11 +38,16 @@ app.post('/students', async (req, res) => {
     }
 });
 
-// Get All Students
+
 app.get('/', (req, res) => {
     res.send('Welcome to the Student Service');
+});  
+
+// Get All Students
+app.get('/students', async (req, res) => {
+    const students = await Student.find(); // Fetches from MongoDB
+    res.json(students);
 });
-  
 
 
 app.listen(port, () => {

@@ -12,8 +12,10 @@ mongoose.connect(process.env.MONGO_URI, {
 .catch(err => console.error("❌ MongoDB connection error:", err));
 
 const app = express();
-const port = 3002;
-app.use(cors());
+const port = process.env.PORT || 3002;
+app.use(cors({
+    origin: 'https://soafrontend-xi.vercel.app/'
+}));
 app.use(bodyParser.json());
 
 // Schema
@@ -33,11 +35,15 @@ app.post('/courses', async (req, res) => {
     }
 });
 
-// Get All Courses
+
 app.get('/', (req, res) => {
     res.send('Welcome to the Course Service');
-  });
-  
+});  
+// Get All Courses
+app.get('/courses', async (req, res) => {
+    const courses = await Course.find();
+    res.json(courses);
+});
 
 app.listen(port, () => {
     console.log(`Course service running on port ${port}`);

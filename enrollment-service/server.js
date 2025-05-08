@@ -13,7 +13,9 @@ mongoose.connect(process.env.MONGO_URI, {
 
 const app = express();
 const port = process.env.PORT || 3003;
-app.use(cors());
+app.use(cors({
+    origin: 'https://soafrontend-xi.vercel.app/'
+}));
 app.use(bodyParser.json());
 
 // Schema
@@ -37,11 +39,15 @@ app.post('/enroll', async (req, res) => {
     }
 });
 
-// Get All Enrollments
+
 app.get('/', (req, res) => {
-    res.send('Welcome to the enrollment Service');
-  });
-  
+    res.send('Welcome to the Enrollment Service');
+});  
+// Get All Enrollments
+app.get('/enrollments', async (req, res) => {
+    const enrollments = await Enrollment.find();
+    res.json(enrollments);
+});
 
 app.listen(port, () => {
     console.log(`Enrollment service running on port ${port}`);
