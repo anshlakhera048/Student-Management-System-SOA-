@@ -36,10 +36,10 @@ app.post('/students', async (req, res) => {
 });
 
 // Get All Students
-app.get('/students', async (req, res) => {
-    const students = await Student.find(); // Fetches from MongoDB
-    res.json(students);
+app.get('/', (req, res) => {
+    res.send('Welcome to the Student Service');
 });
+  
 
 
 app.listen(port, () => {

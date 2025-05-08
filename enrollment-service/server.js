@@ -38,10 +38,10 @@ app.post('/enroll', async (req, res) => {
 });
 
 // Get All Enrollments
-app.get('/enrollments', async (req, res) => {
-    const enrollments = await Enrollment.find();
-    res.json(enrollments);
-});
+app.get('/', (req, res) => {
+    res.send('Welcome to the enrollment Service');
+  });
+  
 
 app.listen(port, () => {
     console.log(`Enrollment service running on port ${port}`);

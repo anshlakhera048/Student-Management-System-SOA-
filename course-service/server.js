@@ -34,10 +34,10 @@ app.post('/courses', async (req, res) => {
 });
 
 // Get All Courses
-app.get('/courses', async (req, res) => {
-    const courses = await Course.find();
-    res.json(courses);
-});
+app.get('/', (req, res) => {
+    res.send('Welcome to the Course Service');
+  });
+  
 
 app.listen(port, () => {
     console.log(`Course service running on port ${port}`);
